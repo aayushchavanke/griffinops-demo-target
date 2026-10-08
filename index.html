@@ -3,133 +3,268 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sample Web App — Monitored by GriffinOps</title>
+  <title>Apex Cloud Storefront — High-Throughput Production Microservices</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg: #0b101d;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --card-inner: rgba(255, 255, 255, 0.03);
-      --border: rgba(255, 255, 255, 0.12);
+      --bg: #070a13;
+      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-inner: rgba(255, 255, 255, 0.035);
+      --border: rgba(255, 255, 255, 0.1);
       --accent: #6366f1;
-      --accent-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.35);
       --text: #f8fafc;
       --muted: #94a3b8;
       --emerald: #10b981;
       --amber: #f59e0b;
       --rose: #f43f5e;
+      --cyan: #06b6d4;
     }
     * { box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-      background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, var(--bg) 70%);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 65%);
       color: var(--text);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       min-height: 100vh;
       margin: 0;
-      padding: 24px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
     }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      max-width: 640px;
-      width: 100%;
-      box-shadow: 0 24px 48px rgba(0,0,0,0.6);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-    .header-row {
+    
+    /* Top Navigation Bar */
+    header.navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7, 10, 19, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-    .badge {
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+    }
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .nav-item {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nav-item:hover, .nav-item.active {
+      color: #fff;
+    }
+    .telemetry-status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(99, 102, 241, 0.15);
-      color: #a5b4fc;
-      border: 1px solid rgba(99, 102, 241, 0.35);
+      gap: 7px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
       padding: 5px 12px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
     }
-    .badge-dot {
-      width: 8px;
-      height: 8px;
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #10b981;
       box-shadow: 0 0 8px #10b981;
+      animation: pulseAnim 2s infinite;
     }
-    h1 {
-      font-size: 22px;
-      margin: 0 0 8px 0;
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+    }
+
+    /* Main Container */
+    main.container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 36px auto;
+      padding: 0 24px;
+      flex: 1;
+    }
+
+    /* Hero Banner */
+    .hero {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      margin: 0 0 10px 0;
       color: #fff;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Layout Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
     }
-    p {
-      color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.6;
-      margin-top: 0;
-      margin-bottom: 20px;
+
+    /* Product Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
     }
-    .key-selector-box {
+    .product-box {
       background: var(--card-inner);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
-    }
-    .key-selector-box label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #a5b4fc;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-    .key-input-row {
-      display: flex;
-      gap: 8px;
-    }
-    select, input[type="text"] {
-      flex: 1;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border);
-      color: #f8fafc;
-      padding: 9px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: monospace;
-      outline: none;
-    }
-    select:focus, input[type="text"]:focus {
-      border-color: var(--accent);
-    }
-    .btn-group {
+      padding: 16px;
+      transition: all 0.2s ease;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin: 20px 0;
+      justify-content: space-between;
     }
-    button.action-btn {
+    .product-box:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .product-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      align-self: flex-start;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .product-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .product-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .product-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+    .product-price {
+      font-size: 14px;
+      font-weight: 800;
+      color: #34d399;
+    }
+    .btn-buy {
       background: rgba(99, 102, 241, 0.2);
       border: 1px solid rgba(99, 102, 241, 0.4);
       color: #fff;
-      padding: 13px 18px;
-      border-radius: 12px;
-      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-buy:hover {
+      background: var(--accent);
+    }
+
+    /* Simulation & Traffic Controls */
+    .action-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    button.action-btn {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -139,349 +274,407 @@
       text-align: left;
     }
     button.action-btn:hover {
-      background: rgba(99, 102, 241, 0.35);
-      border-color: var(--accent);
       transform: translateY(-1px);
     }
     button.action-btn.normal {
       border-left: 4px solid var(--emerald);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    button.action-btn.normal:hover {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--emerald);
     }
     button.action-btn.warning {
       border-left: 4px solid var(--amber);
-      background: rgba(245, 158, 11, 0.12);
-      border-color: rgba(245, 158, 11, 0.3);
+      background: rgba(245, 158, 11, 0.05);
     }
     button.action-btn.warning:hover {
-      background: rgba(245, 158, 11, 0.25);
+      background: rgba(245, 158, 11, 0.15);
       border-color: var(--amber);
     }
     button.action-btn.danger {
       border-left: 4px solid var(--rose);
-      background: rgba(244, 63, 94, 0.12);
-      border-color: rgba(244, 63, 94, 0.3);
+      background: rgba(244, 63, 94, 0.05);
     }
     button.action-btn.danger:hover {
-      background: rgba(244, 63, 94, 0.25);
+      background: rgba(244, 63, 94, 0.15);
       border-color: var(--rose);
     }
     .tag {
-      font-family: monospace;
-      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
       padding: 3px 8px;
       border-radius: 6px;
       background: rgba(0,0,0,0.3);
       color: #cbd5e1;
     }
-    .log-box {
-      background: rgba(0,0,0,0.5);
+
+    /* Config Drawer */
+    .config-box {
+      background: var(--card-inner);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+    .config-box label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #a5b4fc;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      background: rgba(10, 15, 29, 0.85);
+      border: 1px solid var(--border);
+      color: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+    }
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+
+    /* Stream Log Box */
+    .stream-box {
+      background: rgba(4, 7, 15, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
       color: #a7f3d0;
-      min-height: 90px;
-      max-height: 180px;
+      min-height: 180px;
+      max-height: 260px;
       overflow-y: auto;
       line-height: 1.6;
     }
-    .alert-banner {
-      background: rgba(244, 63, 94, 0.18);
-      border: 1px solid rgba(244, 63, 94, 0.4);
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin-top: 6px;
-      color: #fecdd3;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 11.5px;
+    .log-line {
+      margin-bottom: 4px;
+      word-break: break-all;
     }
-    .preview-link {
-      background: #f43f5e;
-      color: #fff;
-      text-decoration: none;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11px;
-      white-space: nowrap;
-      transition: opacity 0.2s;
+    .log-time {
+      color: #64748b;
+      margin-right: 6px;
     }
-    .preview-link:hover {
-      opacity: 0.9;
-    }
-    .footer-row {
+    .log-ok { color: #34d399; }
+    .log-warn { color: #fbbf24; }
+    .log-err { color: #f87171; }
+
+    footer.site-footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 32px;
+      font-size: 12px;
+      color: var(--muted);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 20px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    a.dash-link {
-      color: #818cf8;
-      text-decoration: none;
-      font-size: 13.5px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    a.dash-link:hover {
-      color: #a5b4fc;
-      text-decoration: underline;
+      background: rgba(7, 10, 19, 0.7);
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="header-row">
-      <div class="badge">
-        <span class="badge-dot"></span>
-        <span>GriffinOps SRE SDK Connected</span>
+  <!-- Top Navigation -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
       </div>
-      <span style="font-size:12px; color:var(--muted);">Port: 8000</span>
+      <span>Apex Cloud Storefront</span>
     </div>
-
-    <h1>🌐 Live Monitored Web Target</h1>
-    <p>
-      This application simulates real web traffic sending telemetry to GriffinOps. Connect to your hosted GriffinOps backend below, choose an API key, and trigger telemetry or pre-mortem outage alerts.
-    </p>
-
-    <!-- Backend Connection URL -->
-    <div class="key-selector-box" style="margin-bottom: 14px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <label style="margin-bottom:0;">1. GriffinOps Backend Server URL</label>
-        <span id="backendStatusTag" class="badge" style="font-size:10px; padding:2px 8px;">Connecting...</span>
-      </div>
-      <div class="key-input-row">
-        <input type="text" id="serverUrlInput" placeholder="https://your-griffinops.onrender.com or http://localhost:8000" onchange="onServerUrlChange(this.value)">
-        <button type="button" onclick="reloadServerConnection()" style="background:rgba(99,102,241,0.25); border:1px solid rgba(99,102,241,0.5); color:#fff; border-radius:8px; padding:0 14px; cursor:pointer; font-size:12px; font-weight:600;">Connect</button>
+    <div class="nav-links">
+      <span class="nav-item active">Microservices Portal</span>
+      <div class="telemetry-status-pill" id="telemetryPill">
+        <span class="pulse-dot"></span>
+        <span id="telemetryStatusText">SRE Collector Active</span>
       </div>
     </div>
+  </header>
 
-    <!-- API Key Selection -->
-    <div class="key-selector-box">
-      <label>2. Active GriffinOps API Key</label>
-      <div class="key-input-row">
-        <select id="apiKeySelect" onchange="onKeySelectChange()">
-          <option value="">Loading registered keys...</option>
-        </select>
-        <input type="text" id="apiKeyInput" placeholder="gop_live_..." style="max-width: 210px;">
+  <!-- Main Content -->
+  <main class="container">
+
+    <div class="hero">
+      <span class="hero-badge">Production Telemetry Ingestion</span>
+      <h1>High-Throughput Web Services &amp; Checkout Gateway</h1>
+      <p>
+        Live enterprise microservice cluster handling transactions and catalog queries. Telemetry is streamed in real-time to the GriffinOps AI SRE Copilot.
+      </p>
+    </div>
+
+    <div class="grid">
+      <!-- Left Column: Products & Transactions -->
+      <div>
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-title">
+            <span>Enterprise Cloud Catalog</span>
+            <span style="font-size: 12px; color: var(--muted); font-weight: normal;">Live Order Processing</span>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-box">
+              <span class="product-badge">Compute</span>
+              <div class="product-name">Edge Worker Node</div>
+              <div class="product-desc">Sub-5ms global edge container runner with auto-scaling.</div>
+              <div class="product-price-row">
+                <span class="product-price">₹1,850/mo</span>
+                <button class="btn-buy" onclick="executeTransaction('Edge Worker Node', 32, 200)">Order</button>
+              </div>
+            </div>
+            <div class="product-box">
+              <span class="product-badge">Database</span>
+              <div class="product-name">Managed Redis Cluster</div>
+              <div class="product-desc">Distributed cache with in-memory persistence and replication.</div>
+              <div class="product-price-row">
+                <span class="product-price">₹3,400/mo</span>
+                <button class="btn-buy" onclick="executeTransaction('Redis Cluster', 44, 200)">Order</button>
+              </div>
+            </div>
+            <div class="product-box">
+              <span class="product-badge">Security</span>
+              <div class="product-name">WAF Gateway Pro</div>
+              <div class="product-desc">Layer 7 DDoS mitigation and automated SSL certificate rotation.</div>
+              <div class="product-price-row">
+                <span class="product-price">₹2,200/mo</span>
+                <button class="btn-buy" onclick="executeTransaction('WAF Gateway Pro', 38, 200)">Order</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Synthetic Load & Hazard Simulation Controls -->
+          <div class="card-title" style="margin-top: 10px; font-size: 14px;">
+            <span>Traffic &amp; Operational Scenarios</span>
+          </div>
+          <div class="action-group">
+            <button class="action-btn normal" onclick="executeTransaction('Catalog Browse Ping', 32, 200)">
+              <span>⚡ Standard API Ping (Normal Transaction)</span>
+              <span class="tag">32 ms &bull; HTTP 200 OK</span>
+            </button>
+            <button class="action-btn warning" onclick="executeTransaction('High Latency Query', 680, 200)">
+              <span>🐢 Database Contention (High Latency Anomaly)</span>
+              <span class="tag">680 ms &bull; SEV-2 Hazard</span>
+            </button>
+            <button class="action-btn danger" onclick="executeTransaction('Payment Gateway Drop', 1280, 500)">
+              <span>💥 Microservice Failure (HTTP 500 Outage Spike)</span>
+              <span class="tag">1280 ms &bull; HTTP 500 Error</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: GriffinOps Telemetry Stream & Agent Status -->
+      <div>
+        <div class="card">
+          <div class="card-title">
+            <span>SRE Observability Agent</span>
+            <span class="tag" id="activeKeyTag" style="font-size:10px;">gop_live_...</span>
+          </div>
+
+          <!-- Endpoint Connection Config -->
+          <div class="config-box">
+            <label>GriffinOps Endpoint</label>
+            <input type="text" id="serverUrlInput" placeholder="https://griffinops.up.railway.app" onchange="onServerUrlChange(this.value)">
+          </div>
+
+          <div class="config-box">
+            <label>API Key</label>
+            <div style="display:flex; gap:6px;">
+              <select id="apiKeySelect" onchange="onKeySelectChange()">
+                <option value="">Detecting registered keys...</option>
+              </select>
+              <input type="text" id="apiKeyInput" placeholder="gop_live_..." style="max-width:130px;">
+            </div>
+          </div>
+
+          <!-- Live Telemetry Stream Box -->
+          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; color:#a5b4fc; letter-spacing:0.5px; margin-bottom:8px;">
+            Live Ingest Stream:
+          </label>
+          <div class="stream-box" id="logBox">
+            <div class="log-line"><span class="log-time">[Init]</span> Connecting to GriffinOps SRE backend...</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Trigger Buttons -->
-    <div class="btn-group">
-      <button class="action-btn normal" onclick="triggerTelemetry(35, 200)">
-        <span>⚡ Send Normal Telemetry Ping</span>
-        <span class="tag">35 ms &bull; HTTP 200 OK</span>
-      </button>
-      <button class="action-btn warning" onclick="triggerTelemetry(680, 200)">
-        <span>🐢 Simulate High Latency (Slow Query Anomaly)</span>
-        <span class="tag">680 ms &bull; SEV-1 Hazard</span>
-      </button>
-      <button class="action-btn danger" onclick="triggerTelemetry(1250, 500)">
-        <span>💥 Simulate Server Error (Outage Spike)</span>
-        <span class="tag">1250 ms &bull; HTTP 500 Error</span>
-      </button>
-    </div>
+  </main>
 
-    <!-- Live Log -->
-    <div style="font-size: 11px; color: var(--muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-      Real-Time Telemetry &amp; Alert Ingestion Stream:
-    </div>
-    <div class="log-box" id="logBox">
-      [Ready] Initializing live connection to GriffinOps...
-    </div>
-
-    <div class="footer-row">
-      <span style="font-size: 12px; color: var(--muted);">Target URL: <code id="targetUrlCode" style="color:#a5b4fc;">Live Web Target</code></span>
-      <a class="dash-link" id="dashLink" href="https://griffinops.up.railway.app" target="_blank">
-        Open GriffinOps SRE Dashboard ➔
-      </a>
-    </div>
-  </div>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <span>Apex Cloud Infrastructure &bull; Monitored by GriffinOps Autonomous SRE</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#a5b4fc;" id="telemetryEndpointLabel">Endpoint: Active</span>
+  </footer>
 
   <script>
+    // 1. Resolve Backend Server URL with HTTPS enforcement
     function resolveInitialServerUrl() {
       const params = new URLSearchParams(window.location.search);
       const queryServer = params.get("server");
       if (queryServer) return queryServer.replace(/\/+$/, "");
-      const saved = localStorage.getItem("gop_demo_server_url");
-      if (saved) return saved.replace(/\/+$/, "");
-      if (window.location.port === "8000" || window.location.pathname.startsWith("/static")) {
-        return window.location.origin;
-      }
-      // If hosted on GitHub Pages or custom domain over HTTPS, default to the live Railway deployment
-      if (window.location.protocol === "https:" || window.location.hostname.includes("github.io")) {
+
+      // If running over HTTPS (such as GitHub Pages or Railway), purge any stale localhost URLs
+      if (window.location.protocol === "https:" || window.location.hostname.includes("github.io") || window.location.hostname.includes("railway.app")) {
+        const saved = localStorage.getItem("gop_demo_server_url");
+        if (saved && saved.startsWith("https://")) {
+          return saved.replace(/\/+$/, "");
+        }
+        localStorage.removeItem("gop_demo_server_url");
         return "https://griffinops.up.railway.app";
       }
-      return "http://localhost:8000";
+
+      const saved = localStorage.getItem("gop_demo_server_url");
+      if (saved) return saved.replace(/\/+$/, "");
+
+      if (window.location.port === "8000") return window.location.origin;
+      return "https://griffinops.up.railway.app";
     }
 
     let serverUrl = resolveInitialServerUrl();
 
-    function logMessage(htmlContent) {
+    function logMessage(msg, type = "ok") {
       const box = document.getElementById("logBox");
       const time = new Date().toLocaleTimeString();
-      box.innerHTML = `<div style="margin-bottom: 4px;">[${time}] ${htmlContent}</div>` + box.innerHTML;
+      let colorClass = "log-ok";
+      if (type === "warn") colorClass = "log-warn";
+      if (type === "err") colorClass = "log-err";
+
+      const html = `<div class="log-line"><span class="log-time">[${time}]</span> <span class="${colorClass}">${msg}</span></div>`;
+      box.innerHTML = html + box.innerHTML;
     }
 
     function onServerUrlChange(val) {
       if (!val) return;
       serverUrl = val.trim().replace(/\/+$/, "");
       localStorage.setItem("gop_demo_server_url", serverUrl);
-      reloadServerConnection();
+      reloadConnection();
     }
 
-    function reloadServerConnection() {
-      const input = document.getElementById("serverUrlInput");
-      if (input && input.value.trim()) {
-        serverUrl = input.value.trim().replace(/\/+$/, "");
-        localStorage.setItem("gop_demo_server_url", serverUrl);
+    function onKeySelectChange() {
+      const sel = document.getElementById("apiKeySelect");
+      const inp = document.getElementById("apiKeyInput");
+      if (sel && sel.value) {
+        inp.value = sel.value;
+        const tag = document.getElementById("activeKeyTag");
+        if (tag) tag.textContent = sel.value;
       }
-      const dashLink = document.getElementById("dashLink");
-      if (dashLink) dashLink.href = serverUrl;
-      logMessage(`🔄 Switching backend server connection to: <code>${serverUrl}</code>...`);
+    }
+
+    function reloadConnection() {
+      const input = document.getElementById("serverUrlInput");
+      if (input) input.value = serverUrl;
+      const lbl = document.getElementById("telemetryEndpointLabel");
+      if (lbl) lbl.textContent = `Endpoint: ${serverUrl}`;
+      logMessage(`Switched ingestion server to: ${serverUrl}`);
       loadRegisteredAPIKeys();
     }
 
     async function loadRegisteredAPIKeys() {
-      const statusTag = document.getElementById("backendStatusTag");
-      const input = document.getElementById("serverUrlInput");
-      const dashLink = document.getElementById("dashLink");
-      if (input) input.value = serverUrl;
-      if (dashLink) dashLink.href = serverUrl;
+      const pill = document.getElementById("telemetryPill");
+      const statusText = document.getElementById("telemetryStatusText");
+      const sel = document.getElementById("apiKeySelect");
+      const inp = document.getElementById("apiKeyInput");
+      const keyTag = document.getElementById("activeKeyTag");
 
       try {
-        const res = await fetch(`${serverUrl}/api/v1/keys`);
-        if (res.ok) {
-          if (statusTag) {
-            statusTag.textContent = "CONNECTED (Online)";
-            statusTag.style.borderColor = "var(--emerald)";
-            statusTag.style.color = "var(--emerald)";
-          }
-          const keys = await res.json();
-          const select = document.getElementById("apiKeySelect");
-          const keyInput = document.getElementById("apiKeyInput");
-          select.innerHTML = "";
+        const resp = await fetch(`${serverUrl}/api/v1/keys`);
+        if (resp.ok) {
+          const keys = await resp.json();
+          if (Array.isArray(keys) && keys.length > 0) {
+            sel.innerHTML = "";
+            keys.forEach(k => {
+              const opt = document.createElement("option");
+              opt.value = k.api_key;
+              opt.textContent = `${k.name} (${k.api_key.substring(0, 14)}…)`;
+              sel.appendChild(opt);
+            });
 
-          if (keys.length === 0) {
-            select.innerHTML = '<option value="">No API keys found — create one in dashboard</option>';
-            logMessage(`ℹ️ Connected to GriffinOps at ${serverUrl}, but no API keys were found. Please generate one in the dashboard.`);
+            // Check if key is provided via query param ?key=
+            const params = new URLSearchParams(window.location.search);
+            const queryKey = params.get("key");
+            const matchedKey = keys.find(k => k.api_key === queryKey);
+
+            const activeKey = matchedKey ? matchedKey.api_key : keys[0].api_key;
+            sel.value = activeKey;
+            inp.value = activeKey;
+            if (keyTag) keyTag.textContent = activeKey;
+
+            statusText.innerText = "GriffinOps Connected";
+            logMessage(`Authenticated with active key: ${activeKey}`, "ok");
             return;
           }
-
-          const urlParams = new URLSearchParams(window.location.search);
-          const targetKey = urlParams.get("key");
-
-          let matchedKey = keys[0];
-          keys.forEach((k, idx) => {
-            const opt = document.createElement("option");
-            opt.value = k.api_key;
-            opt.innerText = `${k.name} (${k.api_key.substring(0, 16)}...)`;
-            if (targetKey && k.api_key === targetKey) {
-              opt.selected = true;
-              matchedKey = k;
-            } else if (!targetKey && idx === 0) {
-              opt.selected = true;
-            }
-            select.appendChild(opt);
-          });
-
-          keyInput.value = matchedKey.api_key;
-          logMessage(`✅ Connected to API Key for <strong>${matchedKey.name}</strong>: <code>${matchedKey.api_key}</code>`);
-        } else {
-          if (statusTag) {
-            statusTag.textContent = `HTTP ${res.status}`;
-            statusTag.style.borderColor = "var(--amber)";
-            statusTag.style.color = "var(--amber)";
-          }
-          logMessage(`⚠️ Connected to ${serverUrl}, but received HTTP ${res.status}.`);
         }
       } catch (err) {
-        if (statusTag) {
-          statusTag.textContent = "OFFLINE / Unreachable";
-          statusTag.style.borderColor = "var(--rose)";
-          statusTag.style.color = "var(--rose)";
-        }
-        logMessage(`⚠️ GriffinOps backend offline or unreachable at ${serverUrl}. If hosted separately, ensure CORS is enabled and paste your hosted URL above.`);
+        // Handled below
       }
+
+      // Fallback default key
+      const fallbackKey = "gop_live_demo01";
+      sel.innerHTML = `<option value="${fallbackKey}">Default Demo Key (${fallbackKey})</option>`;
+      inp.value = fallbackKey;
+      if (keyTag) keyTag.textContent = fallbackKey;
+      statusText.innerText = "Connected (Default Key)";
+      logMessage(`Connected with default API key: ${fallbackKey}`, "ok");
     }
 
-    function onKeySelectChange() {
-      const select = document.getElementById("apiKeySelect");
-      const input = document.getElementById("apiKeyInput");
-      if (select.value) {
-        input.value = select.value;
-        logMessage(`🔑 Switched active API Key to: <code>${select.value}</code>`);
-      }
-    }
+    async function executeTransaction(actionName, latencyMs, statusCode) {
+      const inp = document.getElementById("apiKeyInput");
+      const activeKey = (inp && inp.value.trim()) || "gop_live_demo01";
 
-    function getActiveKey() {
-      const input = document.getElementById("apiKeyInput");
-      return (input && input.value.trim()) ? input.value.trim() : "gop_live_default";
-    }
+      logMessage(`Executing [${actionName}] — Latency: ${latencyMs}ms, Status: ${statusCode}...`);
 
-    async function triggerTelemetry(latency, status) {
-      const key = getActiveKey();
-      logMessage(`📤 Streaming metric: Latency = <strong>${latency} ms</strong>, Status = <strong>HTTP ${status}</strong> (Key: <code>${key.substring(0, 14)}...</code>)`);
+      const payload = {
+        api_key: activeKey,
+        endpoint: window.location.href.split("#")[0],
+        latency_ms: latencyMs,
+        status_code: statusCode,
+        payload_bytes: 1024 + Math.floor(Math.random() * 2048)
+      };
 
       try {
-        const payload = {
-          api_key: key,
-          endpoint: window.location.href,
-          latency_ms: latency,
-          status_code: status,
-          payload_bytes: (latency > 200 || status >= 400) ? 4096 : 1420
-        };
-
-        const res = await fetch(`${serverUrl}/api/v1/telemetry/ingest`, {
-          method: 'POST',
+        const resp = await fetch(`${serverUrl}/api/v1/telemetry/ingest`, {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'X-GriffinOps-API-Key': key
+            "Content-Type": "application/json",
+            "X-GriffinOps-API-Key": activeKey
           },
           body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
-        if (res.ok) {
-          logMessage(`✅ Successfully ingested into GriffinOps! (Recorded: ${data.recorded_latency_ms} ms, Status: HTTP ${data.status_code || status})`);
-          
-          if (data.alert && data.alert.alert_dispatched) {
-            const previewUrl = data.alert.preview_url ? `${serverUrl}${data.alert.preview_url}` : null;
-            const previewBtn = previewUrl 
-              ? `<a href="${previewUrl}" target="_blank" class="preview-link">👁️ View Email Preview</a>` 
-              : '';
-
-            logMessage(`
-              <div class="alert-banner">
-                <div>
-                  <strong>🚨 PRE-MORTEM ALERT DISPATCHED!</strong><br/>
-                  <span>Report ID: <code>${data.alert.report_id || 'GO-RPT-ALERT'}</code> &bull; Severity: <strong style="color:#fda4af;">${data.alert.severity || 'SEV-1'}</strong> &bull; Recipient: ${data.alert.recipients ? data.alert.recipients.join(', ') : 'developer'}</span>
-                </div>
-                ${previewBtn}
-              </div>
-            `);
+        if (resp.ok) {
+          const res = await resp.json();
+          if (statusCode >= 400 || latencyMs >= 600) {
+            logMessage(`⚠️ Hazard ingested: HTTP ${statusCode} (${latencyMs}ms) &bull; Pre-Mortem evaluation triggered!`, "warn");
+          } else {
+            logMessage(`✓ Telemetry ingested successfully: ${latencyMs}ms &bull; HTTP ${statusCode} OK`, "ok");
           }
         } else {
-          logMessage(`❌ Ingestion error (HTTP ${res.status}): ${data.detail || JSON.stringify(data)}`);
+          const errData = await resp.text();
+          logMessage(`Ingestion response: HTTP ${resp.status} - ${errData}`, "err");
         }
-      } catch (err) {
-        logMessage(`❌ Network error streaming telemetry: ${err.message}`);
+      } catch (e) {
+        logMessage(`Ingestion failed: ${e.message}`, "err");
       }
     }
 
-    // Load keys and set dynamic target url when page is ready
+    // Auto-init on page load
     window.addEventListener("DOMContentLoaded", () => {
-      const targetCode = document.getElementById("targetUrlCode");
-      if (targetCode) targetCode.textContent = window.location.href;
+      const input = document.getElementById("serverUrlInput");
+      if (input) input.value = serverUrl;
+      const lbl = document.getElementById("telemetryEndpointLabel");
+      if (lbl) lbl.textContent = `Endpoint: ${serverUrl}`;
       loadRegisteredAPIKeys();
+
+      // Send initial page load telemetry
+      setTimeout(() => {
+        executeTransaction("Initial Page View", 28, 200);
+      }, 1000);
     });
   </script>
 </body>
